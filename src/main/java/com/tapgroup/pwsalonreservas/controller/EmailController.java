@@ -29,12 +29,12 @@ public class EmailController {
     //? = enviar cualquier tipo de dato
     @PostMapping("/sentCodeVerification")
     public ResponseEntity<?> enviarCorreo(@RequestBody Email e){
-        String mensaje ="Su codigo de Verficiación";
+        String mensaje ="Su codigo de Verificación es:";
         SimpleMailMessage email = new SimpleMailMessage();
         email.setTo(e.getTo());
         email.setFrom("reservcompany5b@gmail.com");
         email.setSubject(e.getSubject());
-        email.setText(mensaje);
+        email.setText(mensaje+"\n "+e.getText());
         //
         mail.send(email);
 
