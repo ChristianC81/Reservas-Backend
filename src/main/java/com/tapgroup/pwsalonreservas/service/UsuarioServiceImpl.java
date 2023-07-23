@@ -1,0 +1,101 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package com.tapgroup.pwsalonreservas.service;
+
+
+import com.tapgroup.pwsalonreservas.model.Persona;
+import com.tapgroup.pwsalonreservas.model.Usuario;
+import com.tapgroup.pwsalonreservas.repository.PersonaRepository;
+import com.tapgroup.pwsalonreservas.repository.RolRepository;
+import com.tapgroup.pwsalonreservas.repository.UsuarioRepository;
+
+import java.util.List;
+import java.util.Optional;
+
+import com.tapgroup.pwsalonreservas.service.dao.UsuarioServiceDao;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Service;
+
+/**
+ * @author chris
+ */
+@Service
+public class UsuarioServiceImpl implements UsuarioServiceDao {
+
+    private static final Integer idRolAdmin = 1;
+    private static final Integer idRolCliente = 2;
+
+    @Autowired
+    PersonaRepository personaRepository;
+
+    @Autowired
+    RolRepository rolRepository;
+
+    @Autowired
+    UsuarioRepository usuarioRepository;
+
+    @Override
+    public ResponseEntity<Boolean> checkAvailableEmail(String email) {
+        return new ResponseEntity<>(!usuarioRepository.existsByEmail(email), HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<Boolean> checkAvailableUsername(String username) {
+        return new ResponseEntity<>(!usuarioRepository.existsByNombreUsuario(username), HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<?> postUser(Integer idPersona, String username, String password, String email) {
+        // VALIDAR EXISTENCIA DE PERSONA
+        Persona persona = personaRepository.findById(idPersona).orElse(null);
+        if (null == persona) {
+            return new ResponseEntity<>("No existe la persona", HttpStatus.NOT_FOUND);
+        }
+
+        // VALIDAR QUE EL EMAIL NO ESTE EN USO
+        if (usuarioRepository.existsByEmailOrNombreUsuario(email, username)) {
+            return new ResponseEntity<>("El email o nombre de usuario ya esta en uso.", HttpStatus.CONFLICT);
+        }
+
+        // CREAR USUARIO
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        String hashedPassword = passwordEncoder.encode(password);
+        Usuario usuario = new Usuario();
+        usuario.setEstado(true);
+        usuario.setNombreUsuario(username);
+        usuario.setContrasenia(hashedPassword);
+        usuario.setEmail(email);
+        usuario.setPersona(persona);
+        usuario.setRol(rolRepository.findById(idRolCliente).orElse(null));
+        usuarioRepository.save(usuario);
+
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    @Override
+    public ResponseEntity<Usuario> logIn(Usuario usuario) {
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        Usuario usu = usuarioRepository.findByEmail(usuario.getEmail());
+
+        if (usu != null) {
+            if (passwordEncoder.matches(usuario.getContrasenia(), usu.getContrasenia())) {
+                //todo okey retorna el usuario
+                return new ResponseEntity<>(usu, HttpStatus.OK);
+            } else {
+                //contraseña mal
+                return new ResponseEntity<>(HttpStatus.NON_AUTHORITATIVE_INFORMATION);
+            }
+        } else {
+            //usuario mal
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+}
+
