@@ -15,8 +15,6 @@
     <description>Plataforma Web para la gestión de reservas de salones de eventos de la ciudad de Cuenca</description>
     <properties>
         <java.version>17</java.version>
-        <maven.compiler.source>11</maven.compiler.source>
-        <maven.compiler.target>11</maven.compiler.target>
     </properties>
 
     <dependencies>
@@ -87,21 +85,6 @@
                             <artifactId>lombok</artifactId>
                         </exclude>
                     </excludes>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.1</version>
-                <configuration>
-                    <excludes>
-                        <exclude>
-                            <groupId>org.projectlombok</groupId>
-                            <artifactId>lombok</artifactId>
-                        </exclude>
-                    </excludes>
-                    <source>11</source>
-                    <target>11</target>
                 </configuration>
             </plugin>
         </plugins>
