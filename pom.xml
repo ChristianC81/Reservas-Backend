@@ -82,10 +82,7 @@
                 <version>3.8.1</version>
                 <configuration>
                     <excludes>
-                        <exclude>
-                            <groupId>org.projectlombok</groupId>
-                            <artifactId>lombok</artifactId>
-                        </exclude>
+                        <exclude>org.projectlombok:lombok</exclude>
                     </excludes>
                     <source>11</source>
                     <target>11</target>
