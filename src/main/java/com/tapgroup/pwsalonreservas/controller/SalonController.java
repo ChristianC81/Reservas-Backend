@@ -71,6 +71,7 @@ public class SalonController {
 //        salonService.delete(id);
 //        return new ResponseEntity<>(HttpStatus.OK);
 //    }
+
 //Metodo listar salones activos
 @GetMapping("/activos")
 public ResponseEntity<List<Salon>> listaSalons() {
