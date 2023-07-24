@@ -96,44 +96,40 @@ public class UsuarioController {
 //    }
 
 //
-//    //Metodo listar usuarios activos
-//    @GetMapping("/todos")
-//    public ResponseEntity<List<Usuario>> listaUsuarios() {
-//        List<Usuario> usuariosActivos = usuarioService.usuarios();
-//        return new ResponseEntity<>(usuariosActivos, HttpStatus.OK);
-//    }
-//
-//    //Metodo listar usuarios activos
-//    @GetMapping("/activos")
-//    public ResponseEntity<List<Usuario>> listaUsuariosActivos() {
-//        List<Usuario> usuariosActivos = usuarioService.usuariosActivos();
-//        return new ResponseEntity<>(usuariosActivos, HttpStatus.OK);
-//    }
-//
-//    //Metodo listar usuarios inactivos
-//    @GetMapping("/inactivos")
-//    public ResponseEntity<List<Usuario>> listaUsuariosInactivos() {
-//        List<Usuario> usuariosInactivos = usuarioService.usuariosInactivos();
-//        return new ResponseEntity<>(usuariosInactivos, HttpStatus.OK);
-//    }
+    //Metodo listar usuarios activos
+    @GetMapping("/activos")
+    public ResponseEntity<List<Usuario>> listaUsuarios() {
+        ResponseEntity<List<Usuario>> response = usuarioServiceDao.usuariosActivos();
+        return response;
+    }
+
+    // Método listar usuarios inactivos
+    @GetMapping("/inactivos")
+    public ResponseEntity<List<Usuario>> listaUsuariosInactivos() {
+        ResponseEntity<List<Usuario>> response = usuarioServiceDao.usuariosInactivos();
+        return response;
+    }
 
     //Metodo para actualizar estado
 
-//     @PutMapping("/actualizarest/{id}")
-//    public ResponseEntity<Usuario> actualizarEstadoUsuario(@PathVariable Integer id,@RequestBody Usuario u) {
-//        Usuario usu = usuarioService.findById(id);
-//        if (usu != null) {
-//            try {
-//                usu.setUsuEstado(u.getUsuEstado());
-//                return new ResponseEntity<>(usuarioService.save(usu), HttpStatus.CREATED);
-//            } catch (Exception e) {
-//                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-//            }
-//
-//        } else {
-//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-//        }
-//    }
+    @PutMapping("/actualizarest/{id}")
+    public ResponseEntity<Usuario> actualizarEstadoUsuario(@PathVariable Integer id, @RequestBody Usuario u) {
+        ResponseEntity<Usuario> response = usuarioServiceDao.cambiarEstado(id);
+
+        if (response.getStatusCode().is2xxSuccessful()) {
+            Usuario usuarioActualizado = response.getBody();
+            usuarioActualizado.setEstado(u.getEstado());
+
+            try {
+                Usuario usuarioGuardado = usuarioServiceDao.save(usuarioActualizado);
+                return new ResponseEntity<>(usuarioGuardado, HttpStatus.CREATED);
+            } catch (Exception e) {
+                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        } else {
+            return new ResponseEntity<>(response.getStatusCode());
+        }
+    }
 
 
 }

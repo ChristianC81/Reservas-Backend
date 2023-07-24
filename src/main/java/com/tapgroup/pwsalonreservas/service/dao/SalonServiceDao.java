@@ -1,8 +1,11 @@
 package com.tapgroup.pwsalonreservas.service.dao;
 
 import com.tapgroup.pwsalonreservas.model.Salon;
+import com.tapgroup.pwsalonreservas.model.Usuario;
 import com.tapgroup.pwsalonreservas.model.dto.SalonDto;
 import org.springframework.http.ResponseEntity;
+
+import java.util.List;
 
 public interface SalonServiceDao {
 
@@ -15,5 +18,10 @@ public interface SalonServiceDao {
     ResponseEntity<?> listPosts();
 
     ResponseEntity<?> listPostsByUser(String email);
+    ResponseEntity<List<Salon>> salonesActivos();
 
+    ResponseEntity<List<Salon>> salonesInactivos();
+
+    ResponseEntity<Salon> cambiarEstado(int id);
+    Salon save(Salon salon);
 }

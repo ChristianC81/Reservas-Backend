@@ -20,15 +20,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface SalonRepository extends JpaRepository<Salon, Integer> {
 
-//        @Query(value = "Select * from salon s where s.nombre = :nombre", nativeQuery = true)
-//    public Salon buscarSalon(String nombre);
-//
-//    @Query("SELECT s FROM Salon s WHERE s.estado = true")
-//    List<Salon> getSalonesActivos();
-//
-//    @Query("SELECT s FROM Salon s WHERE s.estado = false")
-//    List<Salon> getSalonesInactivos();
-
     Salon findByNombreLike(String nombre);
 
     List<Salon> findByEstado(boolean estado);
@@ -37,4 +28,5 @@ public interface SalonRepository extends JpaRepository<Salon, Integer> {
 
     List<Salon> findByUsuarioPublicador(Usuario usuarioPublicador);
 
+    List<Salon> findByEstado(Boolean estado);
 }

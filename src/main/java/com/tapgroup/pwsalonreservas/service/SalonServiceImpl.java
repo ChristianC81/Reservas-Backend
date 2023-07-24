@@ -31,6 +31,7 @@ import com.tapgroup.pwsalonreservas.repository.SalonRepository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author chris
@@ -219,6 +220,36 @@ public class SalonServiceImpl implements SalonServiceDao {
 
         return new ResponseEntity<>(salonesDto, HttpStatus.OK);
     }
+    @Override
+    public Salon save(Salon Salon) {
+        return salonRepository.save(Salon);
+    }
 
+    // Metodo listar Salons activos
+    @Override
+    public ResponseEntity<List<Salon>> salonesActivos() {
+        List<Salon> SalonesActivos = salonRepository.findByEstado(true);
+        return new ResponseEntity<>(SalonesActivos, HttpStatus.OK);
+    }
+
+    // Metodo listar Salons inactivos
+    @Override
+    public ResponseEntity<List<Salon>> salonesInactivos() {
+        List<Salon> SalonesInactivos = salonRepository.findByEstado(false);
+        return new ResponseEntity<>(SalonesInactivos, HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<Salon> cambiarEstado(int id) {
+        Optional<Salon> optionalSalon = salonRepository.findById(id);
+        if (optionalSalon.isPresent()) {
+            Salon Salon = optionalSalon.get();
+            Salon.setEstado(!Salon.getEstado()); // Cambiar el estado del Salon
+            salonRepository.save(Salon); // Guardar el Salon actualizado en la base de datos
+            return new ResponseEntity<>(Salon, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
 }
 

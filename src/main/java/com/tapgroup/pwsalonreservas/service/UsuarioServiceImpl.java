@@ -28,6 +28,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class UsuarioServiceImpl implements UsuarioServiceDao {
 
+
     private static final Integer idRolAdmin = 1;
     private static final Integer idRolCliente = 2;
 
@@ -97,5 +98,36 @@ public class UsuarioServiceImpl implements UsuarioServiceDao {
         }
     }
 
+    @Override
+    public Usuario save(Usuario usuario) {
+        return usuarioRepository.save(usuario);
+    }
+
+    // Metodo listar usuarios activos
+    @Override
+    public ResponseEntity<List<Usuario>> usuariosActivos() {
+        List<Usuario> usuariosActivos = usuarioRepository.findByEstado(true);
+        return new ResponseEntity<>(usuariosActivos, HttpStatus.OK);
+    }
+
+    // Metodo listar usuarios inactivos
+    @Override
+    public ResponseEntity<List<Usuario>> usuariosInactivos() {
+        List<Usuario> usuariosInactivos = usuarioRepository.findByEstado(false);
+        return new ResponseEntity<>(usuariosInactivos, HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<Usuario> cambiarEstado(int id) {
+        Optional<Usuario> optionalUsuario = usuarioRepository.findById(id);
+        if (optionalUsuario.isPresent()) {
+            Usuario usuario = optionalUsuario.get();
+            usuario.setEstado(!usuario.getEstado()); // Cambiar el estado del usuario
+            usuarioRepository.save(usuario); // Guardar el usuario actualizado en la base de datos
+            return new ResponseEntity<>(usuario, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
 }
 

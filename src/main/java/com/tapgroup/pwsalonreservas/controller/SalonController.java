@@ -6,6 +6,7 @@
 package com.tapgroup.pwsalonreservas.controller;
 
 import com.tapgroup.pwsalonreservas.model.Salon;
+import com.tapgroup.pwsalonreservas.model.Usuario;
 import com.tapgroup.pwsalonreservas.model.dto.SalonDto;
 import com.tapgroup.pwsalonreservas.service.SalonServiceImpl;
 import com.tapgroup.pwsalonreservas.service.dao.SalonServiceDao;
@@ -70,35 +71,39 @@ public class SalonController {
 //        salonService.delete(id);
 //        return new ResponseEntity<>(HttpStatus.OK);
 //    }
+//Metodo listar salones activos
+@GetMapping("/activos")
+public ResponseEntity<List<Salon>> listaSalons() {
+    ResponseEntity<List<Salon>> response = salonServiceDao.salonesActivos();
+    return response;
+}
 
-    //Metodo listar salones activos
-//    @GetMapping("/activos")
-//    public ResponseEntity<List<Salon>> listaSalonesActivos() {
-//        List<Salon> salonesActivos = salonService.salonesActivos();
-//        return new ResponseEntity<>(salonesActivos, HttpStatus.OK);
-//    }
-
-    //Metodo listar salones inactivos
-//    @GetMapping("/inactivos")
-//    public ResponseEntity<List<Salon>> listaSalonesInactivos() {
-//        List<Salon> salonesInactivos = salonService.salonesInactivos();
-//        return new ResponseEntity<>(salonesInactivos, HttpStatus.OK);
-//    }
+    // Método listar salones inactivos
+    @GetMapping("/inactivos")
+    public ResponseEntity<List<Salon>> listaSalonesInactivos() {
+        ResponseEntity<List<Salon>> response = salonServiceDao.salonesInactivos();
+        return response;
+    }
 
     //Metodo para actualizar estado
-//    @PutMapping("/actualizarest/{id}")
-//    public ResponseEntity<Salon> actualizarEstadoSalon(@PathVariable Integer id, @RequestBody Salon s) {
-//        Salon sal = salonService.findById(id);
-//        if (sal != null) {
-//            try {
-//                sal.setSalonEstado(s.getSalonEstado());
-//                return new ResponseEntity<>(salonService.save(sal), HttpStatus.CREATED);
-//            } catch (Exception e) {
-//                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-//            }
-//
-//        } else {
-//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-//        }
-//    }
+
+    @PutMapping("/actualizarest/{id}")
+    public ResponseEntity<Salon> actualizarEstadoSalon(@PathVariable Integer id, @RequestBody Salon u) {
+        ResponseEntity<Salon> response = salonServiceDao.cambiarEstado(id);
+
+        if (response.getStatusCode().is2xxSuccessful()) {
+            Salon salonActualizado = response.getBody();
+            salonActualizado.setEstado(u.getEstado());
+
+            try {
+                Salon salonGuardado = salonServiceDao.save(salonActualizado);
+                return new ResponseEntity<>(salonGuardado, HttpStatus.CREATED);
+            } catch (Exception e) {
+                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        } else {
+            return new ResponseEntity<>(response.getStatusCode());
+        }
+    }
+
 }

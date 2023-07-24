@@ -20,26 +20,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
 
-    //!!!!!!!!!!!!!!!!!!!!!!!!!!
-    //!!!!!!!!!!!!!!!!!!!!
-    //al mandar un parametro siempre va los :varible
-    //los : y la variable si no no vale
-    //buscar el si existe un usuario
-//    @Query("SELECT COUNT(u)>0 FROM Usuario u WHERE u.nombreUsuario = :usuario")
-//    boolean validarUsuario(@Param("usuario") String usuNombre);
-//
-//    @Query("SELECT u FROM Usuario u WHERE u.estado = 'Activo'")
-//    List<Usuario> getUsuariosActivos();
-//
-//    @Query("SELECT u FROM Usuario u WHERE u.estado = 'Inactivo'")
-//    List<Usuario> getUsuariosInactivos();
-
-//    @Query("SELECT u FROM Usuario u JOIN u.personaByIdPersona p WHERE p.email = :correo")
-//    Optional<Usuario> findByUsuario(@Param("correo") String persEmail);
-
-//    @Query("SELECT u FROM Usuario u")
-//    List<Usuario> getUsuarios();
-
     Boolean existsByEmailOrNombreUsuario(String email, String nombreUsuario);
 
     Boolean existsByEmail(String email);
@@ -47,5 +27,9 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
     Boolean existsByNombreUsuario(String nombreUsuario);
 
     Usuario findByEmail(String email);
+
+    Usuario findByIdUsuario(int id);
+    List<Usuario> findByEstado(Boolean estado);
+
 
 }
