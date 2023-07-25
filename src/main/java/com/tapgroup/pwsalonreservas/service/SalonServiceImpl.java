@@ -167,6 +167,18 @@ public class SalonServiceImpl implements SalonServiceDao {
 
     }
 
+    public ResponseEntity<?> deleteById(Integer salonId) {
+
+        Salon salon = salonRepository.findById(salonId).orElse(null);
+        if (salon == null) {
+            return new ResponseEntity<>("No existe el salón con el ID proporcionado", HttpStatus.NOT_FOUND);
+        }
+
+        salonRepository.deleteById(salonId);
+        return new ResponseEntity<>("Salón eliminado correctamente", HttpStatus.OK);
+    }
+
+
     private ResponseEntity<?> getListSalonPublicaciones(List<Salon> salones) {
         List<PublicacionDto> salonesDto = new ArrayList<>();
 

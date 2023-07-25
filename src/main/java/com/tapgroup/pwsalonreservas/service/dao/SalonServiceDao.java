@@ -24,4 +24,8 @@ public interface SalonServiceDao {
 
     ResponseEntity<Salon> cambiarEstado(int id);
     Salon save(Salon salon);
+
+    ResponseEntity<?> deleteById(Integer salonId);
+
+    //void deleteById(Integer salonId);
 }

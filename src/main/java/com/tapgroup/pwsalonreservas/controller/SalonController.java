@@ -66,11 +66,10 @@ public class SalonController {
         return salonServiceDao.getAllCategories();
     }
 
-//    @DeleteMapping("/eliminar/{id}")
-//    public ResponseEntity<Salon> eliminarSalon(@PathVariable Integer id) {
-//        salonService.delete(id);
-//        return new ResponseEntity<>(HttpStatus.OK);
-//    }
+    @DeleteMapping("/eliminar/{id}")
+    public ResponseEntity<Salon> eliminarSalon(@PathVariable Integer id) {salonServiceDao.deleteById(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 
 //Metodo listar salones activos
 @GetMapping("/activos")
