@@ -29,7 +29,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import com.tapgroup.pwsalonreservas.repository.SalonRepository;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -121,29 +126,41 @@ public class SalonServiceImpl implements SalonServiceDao {
         return new ResponseEntity<>(salon, HttpStatus.OK);
     }
 
-    @Override
-    public ResponseEntity<?> postImage(byte[] imagen, Integer idSalon) {
+        @Override
+        public ResponseEntity<?> postImage(byte[] imagen, Integer idSalon) {
+            // ...
+            Date d1= new Date();
 
-        Salon salon = salonRepository.findById(idSalon).orElse(null);
-        if (null == salon) {
-            return new ResponseEntity<>("No existe el salon", HttpStatus.NOT_FOUND);
+                String rutaDirectorio = "C:\\Users\\chris\\Documents\\GitHub\\Reservas-Backend\\recursos\\imagenes"; // Ruta del directorio donde guardar las imágenes
+            String nombreImagen = "imagenSalon_" + idSalon +"_"+d1.getTime()+".jpg"; // Nombre de la imagen (puedes generar un nombre único)
+
+            // Guardar la imagen en el directorio
+            try {
+                Path rutaCompleta = Paths.get(rutaDirectorio, nombreImagen);
+                Files.write(rutaCompleta, imagen);
+            } catch (IOException e) {
+                return new ResponseEntity<>("Error al guardar la imagen", HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+
+            // Obtener el objeto Salon correspondiente al idSalon
+            Salon salon = salonRepository.findById(idSalon).orElse(null);
+            if (salon == null) {
+                return new ResponseEntity<>("No existe el salon", HttpStatus.NOT_FOUND);
+            }
+
+            // Almacenar la URL de la imagen en la base de datos
+            String urlImagen = rutaDirectorio + "/" + nombreImagen;
+            Multimedia multimedia = new Multimedia();
+            multimedia.setSalon(salon); // Asignar el objeto Salon obtenido
+            multimedia.setTipoMultimedia(tipoMultimediaRepository.findById(idTipoMultimediaImage).orElse(null));
+            multimedia.setUrl(urlImagen); // Asignar la URL de la imagen
+
+            multimediaRepository.save(multimedia);
+
+            return new ResponseEntity<>("Imagen guardada", HttpStatus.CREATED);
         }
 
-        TipoMultimedia tipoMultimedia = tipoMultimediaRepository.findById(idTipoMultimediaImage).orElse(null);
-        if (null == tipoMultimedia) {
-            return new ResponseEntity<>("No existe el tipo de multimedia", HttpStatus.NOT_FOUND);
-        }
 
-        Multimedia multimedia = new Multimedia();
-        multimedia.setSalon(salon);
-        multimedia.setTipoMultimedia(tipoMultimedia);
-        multimedia.setUrl("");
-        multimedia.setImagen(null);
-
-        multimediaRepository.save(multimedia);
-
-        return new ResponseEntity<>("Imagen guardada", HttpStatus.CREATED);
-    }
 
     @Override
     public ResponseEntity<?> listPosts() {

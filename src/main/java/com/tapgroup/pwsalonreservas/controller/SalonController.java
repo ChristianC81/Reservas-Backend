@@ -46,8 +46,8 @@ public class SalonController {
     }
 
 
-    @PostMapping("/postImage")
-    public ResponseEntity<?> postImage(@RequestBody byte[] imagen, @RequestParam Integer idSalon) {
+    @PostMapping("/postImage/{idSalon}")
+    public ResponseEntity<?> postImage(@RequestBody byte[] imagen, @PathVariable Integer idSalon) {
         return salonServiceDao.postImage(imagen, idSalon);
     }
 
