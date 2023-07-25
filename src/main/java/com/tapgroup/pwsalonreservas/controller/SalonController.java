@@ -48,7 +48,8 @@ public class SalonController {
 
     @PostMapping("/postImage/{idSalon}")
     public ResponseEntity<?> postImage(@RequestBody byte[] imagen, @PathVariable Integer idSalon) {
-        return salonServiceDao.postImage(imagen, idSalon);
+        salonServiceDao.postImage(imagen, idSalon);
+        return ResponseEntity.ok().body("Imagen guardada exitosamente");
     }
 
     @GetMapping("/listarPublicaciones")
