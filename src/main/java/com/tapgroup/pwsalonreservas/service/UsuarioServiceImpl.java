@@ -4,7 +4,6 @@
  */
 package com.tapgroup.pwsalonreservas.service;
 
-
 import com.tapgroup.pwsalonreservas.model.Persona;
 import com.tapgroup.pwsalonreservas.model.Usuario;
 import com.tapgroup.pwsalonreservas.repository.PersonaRepository;
@@ -69,6 +68,7 @@ public class UsuarioServiceImpl implements UsuarioServiceDao {
         String hashedPassword = passwordEncoder.encode(password);
         Usuario usuario = new Usuario();
         usuario.setEstado(true);
+        usuario.getRol().setIdRol(2);
         usuario.setNombreUsuario(username);
         usuario.setContrasenia(hashedPassword);
         usuario.setEmail(email);
@@ -97,6 +97,7 @@ public class UsuarioServiceImpl implements UsuarioServiceDao {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+
 
     @Override
     public Usuario save(Usuario usuario) {
@@ -129,5 +130,41 @@ public class UsuarioServiceImpl implements UsuarioServiceDao {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+    
+       @Override
+    public ResponseEntity<Integer> userCount(Boolean estado) {
+        Integer usuCount = usuarioRepository.countByEstadoAndRolIdRolNot(estado, 1);
+        return new ResponseEntity<>(usuCount, HttpStatus.OK);
+    }
+
+
+    //recuperar el usuario por estados 
+    @Override
+    public ResponseEntity<List<Usuario>> userState(boolean estado) {
+        List<Usuario> usu = usuarioRepository.findByEstadoAndRolIdRolNot(estado, 1);
+        return new ResponseEntity<>(usu, HttpStatus.OK);
+    }
+
+    //activar o desactivar los usuarios
+    @Override
+    public ResponseEntity<Usuario> userUpdateState(Usuario usu) {
+            
+        Usuario userUp = usuarioRepository.findByIdUsuario(usu.getIdUsuario());
+        if (userUp != null) {
+            
+            userUp.setEstado(usu.getEstado());
+            usuarioRepository.save(userUp);
+            return new ResponseEntity<>(usu, HttpStatus.OK);
+            
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+    }
 }
+
+    //contar los usuario 
+ 
+
+    
 
