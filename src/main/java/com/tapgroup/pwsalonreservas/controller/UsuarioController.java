@@ -41,11 +41,6 @@ public class UsuarioController {
     @Autowired
     UsuarioServiceDao usuarioServiceDao;
 
-//    @Operation(summary = "Se obtiene la lista de Usuarios")
-//    @GetMapping("/listar")
-//    public ResponseEntity<List<Usuario>> listaUsuarioes() {
-//        return new ResponseEntity<>(usuarioService.findByAll(), HttpStatus.OK);
-//    }
 
     @GetMapping("/checkAvailableEmail/{email}")
     public ResponseEntity<Boolean> checkAvailableEmail(@PathVariable String email) {
@@ -56,46 +51,29 @@ public class UsuarioController {
     public ResponseEntity<Boolean> checkAvailableUsername(@PathVariable String username) {
         return usuarioServiceDao.checkAvailableUsername(username);
     }
+    @GetMapping("/todos")
+    public ResponseEntity<List<Usuario>> obtenerTodosLosUsuarios() {
+        return usuarioService.todosUsuarios();
+    }
 
     @PostMapping("/crear")
     public ResponseEntity<?> crearUsuario(@RequestParam(value = "idPersona") Integer idPersona, @RequestParam String username, @RequestParam String password, @RequestParam String email) {
         return usuarioServiceDao.postUser(idPersona, username, password, email);
     }
+    @PutMapping("/actualizar/{id}")
+    public ResponseEntity<?> actualizarUsuario(@PathVariable Integer id, @RequestBody Usuario u) {
+        return usuarioServiceDao.putUser(id, u);
+    }
 
+    @DeleteMapping("/eliminar/{id}")
+    public ResponseEntity<?> eliminarUsuario(@PathVariable Integer id) {
+        return usuarioServiceDao.deleteUser(id);
+    }
     @PostMapping("/login")
     public ResponseEntity<Usuario> login(@RequestBody Usuario usuario) {
         return usuarioServiceDao.logIn(usuario);
     }
 
-
-//    @PutMapping("/actualizar/{id}")
-//    public ResponseEntity<Usuario> actualizarUsuario(@PathVariable Integer id, @RequestBody Usuario u) {
-//        Usuario usu = usuarioService.findById(id);
-//        if (usu != null) {
-//            try {
-//                usu.setUsuNombre(u.getUsuNombre());
-//                usu.setUsuContrasenia(u.getUsuContrasenia());
-//                usu.setRol(u.getRol());
-//                usu.setUsuEstado(u.getUsuEstado());
-//                usu.setPersona(u.getPersona());
-//
-//                return new ResponseEntity<>(usuarioService.save(usu), HttpStatus.CREATED);
-//            } catch (Exception e) {
-//                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-//            }
-//
-//        } else {
-//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-//        }
-//    }
-
-//    @DeleteMapping("/eliminar/{id}")
-//    public ResponseEntity<Usuario> eliminarUsuario(@PathVariable Integer id) {
-//        usuarioService.delete(id);
-//        return new ResponseEntity<>(HttpStatus.OK);
-//    }
-
-//
     //Metodo listar usuarios activos
     @GetMapping("/activos")
     public ResponseEntity<List<Usuario>> listaUsuarios() {
@@ -111,7 +89,6 @@ public class UsuarioController {
     }
 
     //Metodo para actualizar estado
-
     @PutMapping("/actualizarest/{id}")
     public ResponseEntity<Usuario> actualizarEstadoUsuario(@PathVariable Integer id, @RequestBody Usuario u) {
         ResponseEntity<Usuario> response = usuarioServiceDao.cambiarEstado(id);
@@ -130,6 +107,4 @@ public class UsuarioController {
             return new ResponseEntity<>(response.getStatusCode());
         }
     }
-
-
 }

@@ -53,7 +53,8 @@ public class UsuarioServiceImpl implements UsuarioServiceDao {
 
     @Override
     public ResponseEntity<List<Usuario>> todosUsuarios() {
-        return null;
+        List<Usuario> usuarios = usuarioRepository.findAll();
+        return new ResponseEntity<>(usuarios, HttpStatus.OK);
     }
 
     @Override
@@ -82,6 +83,26 @@ public class UsuarioServiceImpl implements UsuarioServiceDao {
         usuarioRepository.save(usuario);
 
         return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    @Override
+    public ResponseEntity<?> putUser(Integer idPersona, Usuario usuario) {
+        Optional<Usuario> optionalUsuario = usuarioRepository.findById(idPersona);
+        if (!optionalUsuario.isPresent()) {
+            return ResponseEntity.notFound().build();
+        }
+        usuario.setIdUsuario(idPersona);
+        usuarioRepository.save(usuario);
+        return ResponseEntity.ok(usuario);
+    }
+    @Override
+    public ResponseEntity<?> deleteUser(Integer idPersona) {
+        Optional<Usuario> optionalUsuario = usuarioRepository.findById(idPersona);
+        if (!optionalUsuario.isPresent()) {
+            return ResponseEntity.notFound().build();
+        }
+        usuarioRepository.deleteById(idPersona);
+        return ResponseEntity.ok().build();
     }
 
     @Override

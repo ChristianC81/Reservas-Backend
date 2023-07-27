@@ -19,7 +19,7 @@ public interface UsuarioServiceDao {
     //PUT
     ResponseEntity<?> putUser(Integer idPersona, Usuario usuario);
     //DELETE
-    ResponseEntity<?> deleteUser(Integer idPersona, Usuario usuario);
+    ResponseEntity<?> deleteUser(Integer idPersona);
     ResponseEntity<Usuario> logIn(Usuario usuario);
 
     Usuario save(Usuario usuario);
