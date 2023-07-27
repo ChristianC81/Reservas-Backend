@@ -86,6 +86,7 @@ public class UsuarioServiceImpl implements UsuarioServiceDao {
         if (usu != null) {
             if (passwordEncoder.matches(usuario.getContrasenia(), usu.getContrasenia())) {
                 //todo okey retorna el usuario
+                usu.getRol();
                 return new ResponseEntity<>(usu, HttpStatus.OK);
             } else {
                 //contraseña mal

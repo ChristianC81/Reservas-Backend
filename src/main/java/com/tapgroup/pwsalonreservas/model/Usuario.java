@@ -6,6 +6,7 @@ package com.tapgroup.pwsalonreservas.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -56,11 +57,15 @@ public class Usuario {
     private Persona persona;
 
     //ROL DE USUARIO
-    @JsonManagedReference(value = "rol")
-    @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnoreProperties(value = {"nombre", "descripcion"})
+    @ManyToOne()
     @JoinColumn(name = "id_rol", referencedColumnName = "id_rol")
     private Rol rol;
+//    @JsonManagedReference(value = "rol")
+//    @JsonIgnore
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "id_rol", referencedColumnName = "id_rol")
+//    private Rol rol;
 
     // UN USUARIO PUEDE EMITIR MUCHAS CALIFICACIONES
     @JsonBackReference(value = "calificacionesByIdUsuario")
