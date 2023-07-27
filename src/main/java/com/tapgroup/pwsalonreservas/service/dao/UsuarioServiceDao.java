@@ -11,6 +11,7 @@ public interface UsuarioServiceDao {
 
     ResponseEntity<Boolean> checkAvailableUsername(String username);
 
+    ResponseEntity<Usuario> usuarioEncontrado(int id);
     //GET
     ResponseEntity<List<Usuario>> todosUsuarios();
 

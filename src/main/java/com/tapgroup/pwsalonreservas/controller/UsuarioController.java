@@ -51,6 +51,11 @@ public class UsuarioController {
     public ResponseEntity<Boolean> checkAvailableUsername(@PathVariable String username) {
         return usuarioServiceDao.checkAvailableUsername(username);
     }
+    @GetMapping("/{id}")
+    public ResponseEntity<Usuario> obtenerUsuarioPorId(@PathVariable int id) {
+        return usuarioService.usuarioEncontrado(id);
+    }
+
     @GetMapping("/todos")
     public ResponseEntity<List<Usuario>> obtenerTodosLosUsuarios() {
         return usuarioService.todosUsuarios();

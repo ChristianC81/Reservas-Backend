@@ -52,6 +52,11 @@ public class UsuarioServiceImpl implements UsuarioServiceDao {
     }
 
     @Override
+    public ResponseEntity<Usuario> usuarioEncontrado(int id) {
+        return new ResponseEntity<>(usuarioRepository.findByIdUsuario(id),HttpStatus.OK);
+    }
+
+    @Override
     public ResponseEntity<List<Usuario>> todosUsuarios() {
         List<Usuario> usuarios = usuarioRepository.findAll();
         return new ResponseEntity<>(usuarios, HttpStatus.OK);
