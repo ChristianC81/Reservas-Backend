@@ -41,7 +41,6 @@ public class UsuarioController {
     @Autowired
     UsuarioServiceDao usuarioServiceDao;
 
-
     @GetMapping("/checkAvailableEmail/{email}")
     public ResponseEntity<Boolean> checkAvailableEmail(@PathVariable String email) {
         return usuarioServiceDao.checkAvailableEmail(email);
@@ -51,6 +50,7 @@ public class UsuarioController {
     public ResponseEntity<Boolean> checkAvailableUsername(@PathVariable String username) {
         return usuarioServiceDao.checkAvailableUsername(username);
     }
+
     @GetMapping("/{id}")
     public ResponseEntity<Usuario> obtenerUsuarioPorId(@PathVariable int id) {
         return usuarioService.usuarioEncontrado(id);
@@ -70,6 +70,7 @@ public class UsuarioController {
     public ResponseEntity<?> crearUsuario(@RequestParam(value = "idPersona") Integer idPersona, @RequestParam String username, @RequestParam String password, @RequestParam String email) {
         return usuarioServiceDao.postUser(idPersona, username, password, email);
     }
+
     @PutMapping("/actualizar/{id}")
     public ResponseEntity<?> actualizarUsuario(@PathVariable Integer id, @RequestBody Usuario u) {
         return usuarioServiceDao.putUser(id, u);
@@ -79,9 +80,28 @@ public class UsuarioController {
     public ResponseEntity<?> eliminarUsuario(@PathVariable Integer id) {
         return usuarioServiceDao.deleteUser(id);
     }
+
     @PostMapping("/login")
     public ResponseEntity<Usuario> login(@RequestBody Usuario usuario) {
         return usuarioServiceDao.logIn(usuario);
+    }
+
+    @PostMapping("/countUs")
+    public ResponseEntity<Integer> countUs(@RequestBody Boolean estado) {
+
+        return usuarioServiceDao.userCount(estado);
+
+    }
+
+    @PostMapping("/userState")
+    public ResponseEntity<List<Usuario>> userState(@RequestBody boolean estado) {
+        return usuarioServiceDao.userState(estado);
+    }
+
+    @PostMapping("/userUpdateState")
+    public ResponseEntity<Usuario> userUpdateState(@RequestBody Usuario usu) {
+
+        return usuarioServiceDao.userUpdateState(usu);
     }
 
     //Metodo listar usuarios activos
@@ -117,4 +137,5 @@ public class UsuarioController {
             return new ResponseEntity<>(response.getStatusCode());
         }
     }
+
 }

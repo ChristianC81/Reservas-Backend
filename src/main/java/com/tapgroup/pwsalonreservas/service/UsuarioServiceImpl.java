@@ -16,7 +16,6 @@ import java.util.Optional;
 
 import com.tapgroup.pwsalonreservas.service.dao.UsuarioServiceDao;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.CrudRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -164,6 +163,37 @@ public class UsuarioServiceImpl implements UsuarioServiceDao {
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+    }
+    @Override
+    public ResponseEntity<Integer> userCount(Boolean estado) {
+       //1 porque no va a seleccionar los admins
+        Integer usuCount = usuarioRepository.countByEstadoAndRolIdRolNot(estado, 1);
+        System.out.println(usuCount +" usuaarios"+estado);
+        return new ResponseEntity<>(usuCount, HttpStatus.OK);
+    }
+
+    //recuperar el usuario por estados 
+    @Override
+    public ResponseEntity<List<Usuario>> userState(boolean estado) {
+        List<Usuario> usu = usuarioRepository.findByEstadoAndRolIdRolNot(estado, 1);
+        return new ResponseEntity<>(usu, HttpStatus.OK);
+    }
+
+    //activar o desactivar los usuarios
+    @Override
+    public ResponseEntity<Usuario> userUpdateState(Usuario usu) {
+
+        Usuario userUp = usuarioRepository.findByIdUsuario(usu.getIdUsuario());
+        if (userUp != null) {
+
+            userUp.setEstado(usu.getEstado());
+            usuarioRepository.save(userUp);
+            return new ResponseEntity<>(usu, HttpStatus.OK);
+
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
     }
 }
 
