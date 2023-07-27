@@ -11,11 +11,19 @@ public interface UsuarioServiceDao {
 
     ResponseEntity<Boolean> checkAvailableUsername(String username);
 
-    ResponseEntity<?> postUser(Integer idPersona, String username, String password, String email);
+    //GET
+    ResponseEntity<List<Usuario>> todosUsuarios();
 
+    //POST
+    ResponseEntity<?> postUser(Integer idPersona, String username, String password, String email);
+    //PUT
+    ResponseEntity<?> putUser(Integer idPersona, Usuario usuario);
+    //DELETE
+    ResponseEntity<?> deleteUser(Integer idPersona, Usuario usuario);
     ResponseEntity<Usuario> logIn(Usuario usuario);
 
     Usuario save(Usuario usuario);
+
     ResponseEntity<List<Usuario>> usuariosActivos();
 
     ResponseEntity<List<Usuario>> usuariosInactivos();

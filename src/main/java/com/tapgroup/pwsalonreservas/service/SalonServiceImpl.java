@@ -28,6 +28,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import com.tapgroup.pwsalonreservas.repository.SalonRepository;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -37,6 +38,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * @author chris
@@ -68,6 +70,7 @@ public class SalonServiceImpl implements SalonServiceDao {
     public ResponseEntity<?> getAllCategories() {
         return new ResponseEntity<>(categoriaRepository.findByEstado(true), HttpStatus.OK);
     }
+
 
     @Override
     public ResponseEntity<?> postSalon(SalonDto salon, String emailUsuario) {
@@ -125,40 +128,72 @@ public class SalonServiceImpl implements SalonServiceDao {
 
         return new ResponseEntity<>(salon, HttpStatus.OK);
     }
-
-        @Override
-        public ResponseEntity<?> postImage(byte[] imagen, Integer idSalon) {
-            // ...
-            Date d1= new Date();
-
-                String rutaDirectorio = "C:\\Users\\chris\\Documents\\GitHub\\Reservas-Backend\\recursos\\imagenes"; // Ruta del directorio donde guardar las imágenes
-            String nombreImagen = "imagenSalon_" + idSalon +"_"+d1.getTime()+".jpg"; // Nombre de la imagen (puedes generar un nombre único)
-
-            // Guardar la imagen en el directorio
-            try {
-                Path rutaCompleta = Paths.get(rutaDirectorio, nombreImagen);
-                Files.write(rutaCompleta, imagen);
-            } catch (IOException e) {
-                return new ResponseEntity<>("Error al guardar la imagen", HttpStatus.INTERNAL_SERVER_ERROR);
-            }
-
-            // Obtener el objeto Salon correspondiente al idSalon
-            Salon salon = salonRepository.findById(idSalon).orElse(null);
-            if (salon == null) {
-                return new ResponseEntity<>("No existe el salon", HttpStatus.NOT_FOUND);
-            }
-
-            // Almacenar la URL de la imagen en la base de datos
-            String urlImagen = rutaDirectorio + "/" + nombreImagen;
-            Multimedia multimedia = new Multimedia();
-            multimedia.setSalon(salon); // Asignar el objeto Salon obtenido
-            multimedia.setTipoMultimedia(tipoMultimediaRepository.findById(idTipoMultimediaImage).orElse(null));
-            multimedia.setUrl(urlImagen); // Asignar la URL de la imagen
-
-            multimediaRepository.save(multimedia);
-
-            return new ResponseEntity<>("Imagen guardada", HttpStatus.CREATED);
+   @Override
+    public ResponseEntity<?> postImage(MultipartFile imagen, Integer idSalon) {
+        if (imagen.isEmpty()) {
+            return new ResponseEntity<>("La imagen no puede estar vacía", HttpStatus.BAD_REQUEST);
         }
+
+        // Convertir la imagen a MultipartFile a byte array
+        byte[] bytes;
+        try {
+            bytes = imagen.getBytes();
+        } catch (IOException e) {
+            return new ResponseEntity<>("Error al leer la imagen", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        Date d1 = new Date();
+        String rutaDirectorio = "C:\\Users\\chris\\Documents\\GitHub\\Reservas-Backend\\recursos\\imagenes"; // Ruta del directorio donde guardar las imágenes
+        String nombreImagen = "imagenSalon_" + idSalon +"_"+d1.getTime()+".jpg"; // Nombre de la imagen (puedes generar un nombre único)
+
+        // Guardar la imagen en el directorio
+        try {
+            Path rutaCompleta = Paths.get(rutaDirectorio, nombreImagen);
+            Files.write(rutaCompleta, bytes);
+        } catch (IOException e) {
+            return new ResponseEntity<>("Error al guardar la imagen", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        // Obtener el objeto Salon correspondiente al idSalon
+        Salon salon = salonRepository.findById(idSalon).orElse(null);
+        if (salon == null) {
+            return new ResponseEntity<>("No existe el salon", HttpStatus.NOT_FOUND);
+        }
+
+        // Almacenar la URL de la imagen en la base de datos
+        String urlImagen = rutaDirectorio + "\\" + nombreImagen;
+        Multimedia multimedia = new Multimedia();
+        multimedia.setSalon(salon); // Asignar el objeto Salon obtenido
+        multimedia.setTipoMultimedia(tipoMultimediaRepository.findById(idTipoMultimediaImage).orElse(null));
+        multimedia.setUrl(urlImagen); // Asignar la URL de la imagen
+
+        multimediaRepository.save(multimedia);
+
+        return new ResponseEntity<>("Imagen guardada", HttpStatus.CREATED);
+    }
+
+    @Override
+    public List<byte[]> getImages(Integer idSalon) {
+
+            // Aquí necesitas obtener el salón basado en el idSalon
+            Salon salon = salonRepository.findById(idSalon).orElseThrow(() -> new RuntimeException("Salon no encontrado"));
+
+            // Luego, obtienes las imágenes asociadas a ese salón
+            List<Multimedia> multimediaList = salon.getMultimediaBySalon();
+
+            // Finalmente, lees los archivos y los conviertes en bytes
+            return multimediaList.stream()
+                    .map(multimedia -> {
+                        try {
+                            Path path = Paths.get(multimedia.getUrl());
+                            return Files.readAllBytes(path);
+                        } catch (Exception e) {
+                            throw new RuntimeException("Error al cargar la imagen", e);
+                        }
+                    })
+                    .collect(Collectors.toList());
+
+    }
 
 
 

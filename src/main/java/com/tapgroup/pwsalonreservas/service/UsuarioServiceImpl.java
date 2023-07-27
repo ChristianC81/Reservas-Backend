@@ -52,6 +52,11 @@ public class UsuarioServiceImpl implements UsuarioServiceDao {
     }
 
     @Override
+    public ResponseEntity<List<Usuario>> todosUsuarios() {
+        return null;
+    }
+
+    @Override
     public ResponseEntity<?> postUser(Integer idPersona, String username, String password, String email) {
         // VALIDAR EXISTENCIA DE PERSONA
         Persona persona = personaRepository.findById(idPersona).orElse(null);
