@@ -4,8 +4,8 @@
  */
 package com.tapgroup.pwsalonreservas.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -29,6 +29,7 @@ import lombok.*;
 @Table(name = "persona")
 @AllArgsConstructor
 @NoArgsConstructor
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Persona {
 
     @Id
@@ -58,11 +59,9 @@ public class Persona {
     private Date fechaNac;
 
     // USUARIOS DE LA PERSONA
-    @JsonBackReference(value = "usersByPersona")
-    @JsonIgnore
+    @JsonManagedReference(value = "usuario-persona")
     @OneToMany(mappedBy = "persona", fetch = FetchType.LAZY)
     private List<Usuario> usersByPersona;
-
 
 
 }

@@ -57,8 +57,8 @@ public class UsuarioController {
     }
 
     @GetMapping("email/{email}")
-    public ResponseEntity<Usuario> obtenerUsuarioPorId(@PathVariable String email) {
-        return usuarioService.usuarioEncontradoEmail(email);
+    public ResponseEntity<?> obtenerUsuarioPorEmail(@PathVariable String email) {
+        return usuarioServiceDao.usuarioEncontradoEmail(email);
     }
 
     @GetMapping("/todos")
@@ -117,4 +117,22 @@ public class UsuarioController {
             return new ResponseEntity<>(response.getStatusCode());
         }
     }
+    @PostMapping("/countUs")
+    public ResponseEntity<Integer> countUs(@RequestBody Boolean estado) {
+
+        return usuarioServiceDao.userCount(estado);
+
+    }
+
+    @PostMapping("/userState")
+    public ResponseEntity<List<Usuario>> userState(@RequestBody boolean estado){
+        return usuarioServiceDao.userState(estado);
+    }
+
+    @PostMapping("/userUpdateState")
+    public ResponseEntity<Usuario>userUpdateState(@RequestBody Usuario usu){
+
+        return usuarioServiceDao.userUpdateState(usu);
+    }
+
 }

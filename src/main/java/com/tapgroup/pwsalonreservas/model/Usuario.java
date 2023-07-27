@@ -28,6 +28,7 @@ import lombok.Data;
  */
 @Data
 @Entity
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Usuario {
 
     @Id
@@ -50,8 +51,7 @@ public class Usuario {
     private String email;
 
     // PERSONA A LA QUE PERTENECE EL USUARIO
-    @JsonManagedReference(value = "persona")
-    @JsonIgnore
+    @JsonBackReference(value = "usuario-persona")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_persona", referencedColumnName = "id_persona")
     private Persona persona;

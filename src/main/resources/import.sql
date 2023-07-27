@@ -17,14 +17,14 @@
 
 --Salones
 
-INSERT INTO public.categoria(id_categoria, categoria, estado)VALUES (1, 'Corporativo', true);
-INSERT INTO public.categoria(id_categoria, categoria, estado)VALUES (2, 'Aniversarios', true);
-INSERT INTO public.categoria(id_categoria, categoria, estado)VALUES (3, 'Bautizos', true);
-INSERT INTO public.categoria(id_categoria, categoria, estado)VALUES (4, 'Bodas', true);
-INSERT INTO public.categoria(id_categoria, categoria, estado)VALUES (5, 'Culturales', true);
-INSERT INTO public.categoria(id_categoria, categoria, estado)VALUES (6, 'Cumpleaños', true);
-INSERT INTO public.categoria(id_categoria, categoria, estado)VALUES (7, 'Educativos', true);
-INSERT INTO public.categoria(id_categoria, categoria, estado)VALUES (8, 'Graduaciones', true);
-INSERT INTO public.categoria(id_categoria, categoria, estado)VALUES (9, 'Fiestas Infantiles', true);
-INSERT INTO public.categoria(id_categoria, categoria, estado)VALUES (10, 'Musicales', true);
-INSERT INTO public.categoria(id_categoria, categoria, estado)VALUES (11, 'Seminarios',true);
+    INSERT INTO public.categoria(id_categoria, categoria, estado)VALUES (1, 'Corporativo', true);
+    INSERT INTO public.categoria(id_categoria, categoria, estado)VALUES (2, 'Aniversarios', true);
+    INSERT INTO public.categoria(id_categoria, categoria, estado)VALUES (3, 'Bautizos', true);
+    INSERT INTO public.categoria(id_categoria, categoria, estado)VALUES (4, 'Bodas', true);
+    INSERT INTO public.categoria(id_categoria, categoria, estado)VALUES (5, 'Culturales', true);
+    INSERT INTO public.categoria(id_categoria, categoria, estado)VALUES (6, 'Cumpleaños', true);
+    INSERT INTO public.categoria(id_categoria, categoria, estado)VALUES (7, 'Educativos', true);
+    INSERT INTO public.categoria(id_categoria, categoria, estado)VALUES (8, 'Graduaciones', true);
+    INSERT INTO public.categoria(id_categoria, categoria, estado)VALUES (9, 'Fiestas Infantiles', true);
+    INSERT INTO public.categoria(id_categoria, categoria, estado)VALUES (10, 'Musicales', true);
+    INSERT INTO public.categoria(id_categoria, categoria, estado)VALUES (11, 'Seminarios',true);

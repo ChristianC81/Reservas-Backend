@@ -33,4 +33,10 @@ public interface UsuarioServiceDao {
     ResponseEntity<List<Usuario>> usuariosInactivos();
 
     ResponseEntity<Usuario> cambiarEstado(int id);
+
+    ResponseEntity<Integer> userCount(Boolean estado);
+
+    ResponseEntity<List<Usuario>> userState(boolean estado);
+
+    ResponseEntity<Usuario> userUpdateState(Usuario usu);
 }

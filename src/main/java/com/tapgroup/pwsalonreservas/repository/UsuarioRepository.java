@@ -25,7 +25,6 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
 
     Usuario findByEmail(String email);
 
-
     Usuario findByIdUsuario(int id);
     List<Usuario> findByEstado(Boolean estado);
 
@@ -35,5 +34,6 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
     
     Usuario findByIdUsuario(Integer idUsu);
     List<Usuario> findAll();
+
 
 }
