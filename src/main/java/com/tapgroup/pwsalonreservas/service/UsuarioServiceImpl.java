@@ -4,8 +4,8 @@
  */
 package com.tapgroup.pwsalonreservas.service;
 
+
 import com.tapgroup.pwsalonreservas.model.Persona;
-import com.tapgroup.pwsalonreservas.model.Rol;
 import com.tapgroup.pwsalonreservas.model.Usuario;
 import com.tapgroup.pwsalonreservas.repository.PersonaRepository;
 import com.tapgroup.pwsalonreservas.repository.RolRepository;
@@ -28,6 +28,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class UsuarioServiceImpl implements UsuarioServiceDao {
 
+
     private static final Integer idRolAdmin = 1;
     private static final Integer idRolCliente = 2;
 
@@ -48,6 +49,22 @@ public class UsuarioServiceImpl implements UsuarioServiceDao {
     @Override
     public ResponseEntity<Boolean> checkAvailableUsername(String username) {
         return new ResponseEntity<>(!usuarioRepository.existsByNombreUsuario(username), HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<Usuario> usuarioEncontrado(int id) {
+        return new ResponseEntity<>(usuarioRepository.findByIdUsuario(id),HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<Usuario> usuarioEncontradoEmail(String email) {
+        return new ResponseEntity<>(usuarioRepository.findByEmail(email),HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<List<Usuario>> todosUsuarios() {
+        List<Usuario> usuarios = usuarioRepository.findAll();
+        return new ResponseEntity<>(usuarios, HttpStatus.OK);
     }
 
     @Override
@@ -79,6 +96,26 @@ public class UsuarioServiceImpl implements UsuarioServiceDao {
     }
 
     @Override
+    public ResponseEntity<?> putUser(Integer idPersona, Usuario usuario) {
+        Optional<Usuario> optionalUsuario = usuarioRepository.findById(idPersona);
+        if (!optionalUsuario.isPresent()) {
+            return ResponseEntity.notFound().build();
+        }
+        usuario.setIdUsuario(idPersona);
+        usuarioRepository.save(usuario);
+        return ResponseEntity.ok(usuario);
+    }
+    @Override
+    public ResponseEntity<?> deleteUser(Integer idPersona) {
+        Optional<Usuario> optionalUsuario = usuarioRepository.findById(idPersona);
+        if (!optionalUsuario.isPresent()) {
+            return ResponseEntity.notFound().build();
+        }
+        usuarioRepository.deleteById(idPersona);
+        return ResponseEntity.ok().build();
+    }
+
+    @Override
     public ResponseEntity<Usuario> logIn(Usuario usuario) {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         Usuario usu = usuarioRepository.findByEmail(usuario.getEmail());
@@ -86,7 +123,6 @@ public class UsuarioServiceImpl implements UsuarioServiceDao {
         if (usu != null) {
             if (passwordEncoder.matches(usuario.getContrasenia(), usu.getContrasenia())) {
                 //todo okey retorna el usuario
-                usu.getRol();
                 return new ResponseEntity<>(usu, HttpStatus.OK);
             } else {
                 //contraseña mal
@@ -129,36 +165,5 @@ public class UsuarioServiceImpl implements UsuarioServiceDao {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
-
-    @Override
-    public ResponseEntity<Integer> userCount(Boolean estado) {
-       //1 porque no va a seleccionar los admins
-        Integer usuCount = usuarioRepository.countByEstadoAndRolIdRolNot(estado, 1);
-        System.out.println(usuCount +" usuaarios"+estado);
-        return new ResponseEntity<>(usuCount, HttpStatus.OK);
-    }
-
-    //recuperar el usuario por estados 
-    @Override
-    public ResponseEntity<List<Usuario>> userState(boolean estado) {
-        List<Usuario> usu = usuarioRepository.findByEstadoAndRolIdRolNot(estado, 1);
-        return new ResponseEntity<>(usu, HttpStatus.OK);
-    }
-
-    //activar o desactivar los usuarios
-    @Override
-    public ResponseEntity<Usuario> userUpdateState(Usuario usu) {
-
-        Usuario userUp = usuarioRepository.findByIdUsuario(usu.getIdUsuario());
-        if (userUp != null) {
-
-            userUp.setEstado(usu.getEstado());
-            usuarioRepository.save(userUp);
-            return new ResponseEntity<>(usu, HttpStatus.OK);
-
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-
-    }
 }
+

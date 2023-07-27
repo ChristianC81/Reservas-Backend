@@ -1,7 +1,6 @@
 package com.tapgroup.pwsalonreservas.service.dao;
 
 import com.tapgroup.pwsalonreservas.model.Usuario;
-import java.util.List;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
@@ -12,23 +11,26 @@ public interface UsuarioServiceDao {
 
     ResponseEntity<Boolean> checkAvailableUsername(String username);
 
-    ResponseEntity<?> postUser(Integer idPersona, String username, String password, String email);
+    ResponseEntity<Usuario> usuarioEncontrado(int id);
 
+    ResponseEntity<Usuario> usuarioEncontradoEmail(String email);
+
+    //GET
+    ResponseEntity<List<Usuario>> todosUsuarios();
+
+    //POST
+    ResponseEntity<?> postUser(Integer idPersona, String username, String password, String email);
+    //PUT
+    ResponseEntity<?> putUser(Integer idPersona, Usuario usuario);
+    //DELETE
+    ResponseEntity<?> deleteUser(Integer idPersona);
     ResponseEntity<Usuario> logIn(Usuario usuario);
 
-
     Usuario save(Usuario usuario);
-    
+
     ResponseEntity<List<Usuario>> usuariosActivos();
 
     ResponseEntity<List<Usuario>> usuariosInactivos();
 
     ResponseEntity<Usuario> cambiarEstado(int id);
-    
-    ResponseEntity<Integer> userCount(Boolean estado);
-    
-    ResponseEntity<List<Usuario>> userState(boolean estado);
-    
-    ResponseEntity<Usuario> userUpdateState(Usuario usu);
-
 }
