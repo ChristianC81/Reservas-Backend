@@ -21,7 +21,7 @@ import org.hibernate.annotations.Type;
 @Setter
 @Entity
 @Table(name = "multimedia")
-public class Multimedia {
+public class    Multimedia {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

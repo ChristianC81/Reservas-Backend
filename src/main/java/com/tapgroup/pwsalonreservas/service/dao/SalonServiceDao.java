@@ -4,6 +4,7 @@ import com.tapgroup.pwsalonreservas.model.Salon;
 import com.tapgroup.pwsalonreservas.model.Usuario;
 import com.tapgroup.pwsalonreservas.model.dto.SalonDto;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -13,8 +14,9 @@ public interface SalonServiceDao {
 
     ResponseEntity<?> postSalon(SalonDto salon, String emailPublicador);
 
-    ResponseEntity<?> postImage(byte[] imagen, Integer idSalon);
+    ResponseEntity<?> postImage(MultipartFile imagen, Integer idSalon);
 
+    List<byte[]> getImages(Integer idSalon);
     ResponseEntity<?> listPosts();
 
     ResponseEntity<?> listPostsByUser(String email);

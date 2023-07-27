@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * @author jonny
@@ -44,13 +45,15 @@ public class SalonController {
     public ResponseEntity<?> crearSalon(@RequestBody SalonDto salon, @RequestParam String emailPublicador) {
         return salonServiceDao.postSalon(salon, emailPublicador);
     }
-
-
-    @PostMapping("/postImage")
-    public ResponseEntity<?> postImage(@RequestBody byte[] imagen, @RequestParam Integer idSalon) {
+   @PostMapping("/postImage/{idSalon}")
+    public ResponseEntity<?> postImage(@RequestParam("imagen") MultipartFile imagen, @PathVariable Integer idSalon) {
         return salonServiceDao.postImage(imagen, idSalon);
     }
 
+   @GetMapping("/getImages/{idSalon}")
+   public List<byte[]> getImages(@PathVariable Integer idSalon) {
+       return salonServiceDao.getImages(idSalon);
+   }
     @GetMapping("/listarPublicaciones")
     public ResponseEntity<?> listarPublicaciones() {
         return salonServiceDao.listPosts();
