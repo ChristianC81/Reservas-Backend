@@ -4,6 +4,7 @@
  */
 package com.tapgroup.pwsalonreservas.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.Column;
@@ -37,7 +38,7 @@ public class Persona {
     @Column(name = "id_persona")
     private Integer idPersona;
 
-     @Column(name = "dni_pasaporte", length = 10, unique = true)
+    @Column(name = "dni_pasaporte", length = 10, unique = true)
     private String dniPasaporte;
 
     //@Size(min = 3, max = 10, message = "La persona debe tener entre 3 y 10 caracteres")
@@ -59,9 +60,8 @@ public class Persona {
     private Date fechaNac;
 
     // USUARIOS DE LA PERSONA
-    @JsonManagedReference(value = "usuario-persona")
+    @JsonBackReference(value = "persona")
     @OneToMany(mappedBy = "persona", fetch = FetchType.LAZY)
     private List<Usuario> usersByPersona;
-
 
 }

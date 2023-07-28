@@ -51,9 +51,10 @@ public class Usuario {
     private String email;
 
     // PERSONA A LA QUE PERTENECE EL USUARIO
-    @JsonBackReference(value = "usuario-persona")
+   
+    @JsonIgnoreProperties(value = {"dniPasaporte", "nombre", "apellido", "telefono", "celular", "fechaNac"})
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_persona", referencedColumnName = "id_persona")
+    @JoinColumn(name = "idPersona", referencedColumnName = "id_persona")
     private Persona persona;
 
     //ROL DE USUARIO

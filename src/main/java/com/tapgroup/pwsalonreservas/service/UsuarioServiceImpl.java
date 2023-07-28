@@ -98,8 +98,16 @@
         @Override
         public ResponseEntity<?> putUser(Integer idPersona, Usuario usuario) {
             Optional<Usuario> optionalUsuario = usuarioRepository.findById(idPersona);
+             BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
             if (!optionalUsuario.isPresent()) {
                 return ResponseEntity.notFound().build();
+            }
+            //creo un usuario recuperado de la base para guardarlo
+            Usuario userUptdate=optionalUsuario.get();
+            //hago las comparaciones para mandar a guardar
+            if(!passwordEncoder.matches(usuario.getContrasenia(), userUptdate.getContrasenia())){
+                System.out.println(usuario.getContrasenia());
+                usuario.setContrasenia(passwordEncoder.encode(usuario.getContrasenia()));
             }
             usuario.setIdUsuario(idPersona);
             usuarioRepository.save(usuario);
