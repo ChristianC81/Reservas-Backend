@@ -35,5 +35,5 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
     Usuario findByIdUsuario(Integer idUsu);
     List<Usuario> findAll();
 
-
+    Usuario findByNombreUsuario(String nombreUsuario);
 }
