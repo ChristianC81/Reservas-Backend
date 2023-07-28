@@ -44,7 +44,7 @@ import java.util.stream.Collectors;
  * @author chris
  */
 @Service
-public class SalonServiceImpl implements SalonServiceDao {
+public class SalonServiceImpl implements SalonServiceDao  {
 
     private final Integer idTipoMultimediaImage = 1;
 
@@ -70,7 +70,6 @@ public class SalonServiceImpl implements SalonServiceDao {
     public ResponseEntity<?> getAllCategories() {
         return new ResponseEntity<>(categoriaRepository.findByEstado(true), HttpStatus.OK);
     }
-
 
     @Override
     public ResponseEntity<?> postSalon(SalonDto salon, String emailUsuario) {
@@ -143,7 +142,7 @@ public class SalonServiceImpl implements SalonServiceDao {
         }
 
         Date d1 = new Date();
-        String rutaDirectorio = "C:\\Users\\chris\\Documents\\GitHub\\Reservas-Backend\\recursos\\imagenes"; // Ruta del directorio donde guardar las imágenes
+        String rutaDirectorio = "C:\\Users\\jhudy\\OneDrive\\Documents\\GitHub\\Reservas-Backend\\recursos\\imagenes"; // Ruta del directorio donde guardar las imágenes
         String nombreImagen = "imagenSalon_" + idSalon +"_"+d1.getTime()+".jpg"; // Nombre de la imagen (puedes generar un nombre único)
 
         // Guardar la imagen en el directorio
@@ -228,6 +227,11 @@ public class SalonServiceImpl implements SalonServiceDao {
 
         salonRepository.deleteById(salonId);
         return new ResponseEntity<>("Salón eliminado correctamente", HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<List<Salon>> listSalonCategorias(String categoria) {
+        return new ResponseEntity<>(salonRepository.findByCategoriaCategoria(categoria), HttpStatus.OK);
     }
 
 

@@ -109,4 +109,11 @@ public ResponseEntity<List<Salon>> listaSalons() {
         }
     }
 
+    //Método para listar los salones por categoria
+    @GetMapping("/catsalon/{categoria}")
+    public ResponseEntity<List<Salon>> listaCatSalon(@PathVariable String categoria) {
+            return salonServiceDao.listSalonCategorias(categoria);
+    }
+
+
 }

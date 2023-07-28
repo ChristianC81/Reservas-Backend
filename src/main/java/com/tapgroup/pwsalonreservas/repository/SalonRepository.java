@@ -29,4 +29,7 @@ public interface SalonRepository extends JpaRepository<Salon, Integer> {
     List<Salon> findByUsuarioPublicador(Usuario usuarioPublicador);
 
     List<Salon> findByEstado(Boolean estado);
+
+    //buscar salones por categoría
+    List<Salon> findByCategoriaCategoria(String categoria);
 }

@@ -29,5 +29,7 @@ public interface SalonServiceDao {
 
     ResponseEntity<?> deleteById(Integer salonId);
 
+    //buscar por categoria
+    ResponseEntity<List<Salon>> listSalonCategorias(String categoria);
     //void deleteById(Integer salonId);
 }

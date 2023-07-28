@@ -86,6 +86,7 @@ public class Salon {
     private List<Calificacion> calificacionesBySalon;
 
     // COMPLEMENTOS DEL SALON
+    @JsonIgnore
     @JsonBackReference(value = "complementosBySalon")
     @OneToMany(mappedBy = "salonByIdSalon", fetch = FetchType.LAZY)
     private List<Complemento> complementosBySalon;
@@ -97,6 +98,7 @@ public class Salon {
     private List<Pedido> reservasBySalon;
 
     // CATEGORIA DEL SALON
+    @JsonIgnore
     @JsonManagedReference(value = "categoria")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_categoria", referencedColumnName = "id_categoria")
