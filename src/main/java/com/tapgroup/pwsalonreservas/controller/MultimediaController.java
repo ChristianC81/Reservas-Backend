@@ -33,7 +33,7 @@ public class MultimediaController {
     //}
 
     @DeleteMapping("/eliminar/{id}")
-    public ResponseEntity<Multimedia> eliminarMultimedia(@PathVariable Integer id) {multimediaServiceDao.deleteByidSalon(id);
+    public ResponseEntity<Multimedia> eliminarMultimedia(@PathVariable Integer id) {multimediaServiceDao.deleteBySalonId(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

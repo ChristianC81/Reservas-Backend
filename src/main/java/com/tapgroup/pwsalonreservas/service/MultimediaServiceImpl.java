@@ -41,14 +41,14 @@ public class MultimediaServiceImpl implements MultimediaServiceDao {
         }
 
         @Override
-    public ResponseEntity<?> deleteByidSalon(Integer id_salon) {
+    public ResponseEntity<?> deleteBySalonId(Integer id_salon) {
 
         Multimedia multimedia = multimediaRepository.findById(id_salon).orElse(null);
         if (multimedia == null) {
             return new ResponseEntity<>("No existe la multimedia con el ID proporcionado", HttpStatus.NOT_FOUND);
         }
 
-        multimediaRepository.deleteByidSalon(id_salon);
+        multimediaRepository.deleteBySalonId(id_salon);
         return new ResponseEntity<>("Multimedia eliminado correctamente", HttpStatus.OK);
     }
 
