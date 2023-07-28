@@ -6,4 +6,6 @@ import org.springframework.http.ResponseEntity;
 public interface PersonaServiceDao {
 
     ResponseEntity<?> postPerson (Persona person);
+
+    ResponseEntity<?> buscarPersonPorNombreUsuario(String nombreUsuario);
 }

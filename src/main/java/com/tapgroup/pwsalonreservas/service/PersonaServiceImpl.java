@@ -8,6 +8,7 @@ import com.tapgroup.pwsalonreservas.model.Persona;
 import com.tapgroup.pwsalonreservas.model.Usuario;
 import com.tapgroup.pwsalonreservas.repository.PersonaRepository;
 
+import com.tapgroup.pwsalonreservas.repository.UsuarioRepository;
 import com.tapgroup.pwsalonreservas.service.dao.PersonaServiceDao;
 import com.tapgroup.pwsalonreservas.service.dao.UsuarioServiceDao;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,9 @@ public class PersonaServiceImpl implements PersonaServiceDao {
     @Autowired
     PersonaRepository personaRepository;
 
+    @Autowired
+    UsuarioRepository usuarioRepository;
+
     @Override
     public ResponseEntity<Persona> postPerson(Persona person) {
         if (!personaRepository.existsByDniPasaporte(person.getDniPasaporte())) {
@@ -39,6 +43,17 @@ public class PersonaServiceImpl implements PersonaServiceDao {
             return new ResponseEntity<>(personaRepository.save(person), HttpStatus.CREATED);
         } else {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
+        }
+    }
+
+    @Override
+    public ResponseEntity<?> buscarPersonPorNombreUsuario(String nombreUsuario) {
+        Usuario usuario = usuarioRepository.findByNombreUsuario(nombreUsuario);
+        if (usuario != null) {
+            Persona persona = usuario.getPersona();
+            return new ResponseEntity<>(persona, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 }
