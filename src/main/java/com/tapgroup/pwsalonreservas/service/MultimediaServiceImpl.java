@@ -6,9 +6,12 @@ package com.tapgroup.pwsalonreservas.service;
 
 
 import com.tapgroup.pwsalonreservas.model.Multimedia;
+import com.tapgroup.pwsalonreservas.model.Salon;
 import com.tapgroup.pwsalonreservas.model.Usuario;
 import com.tapgroup.pwsalonreservas.repository.MultimediaRepository;
 import com.tapgroup.pwsalonreservas.service.dao.MultimediaServiceDao;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -20,7 +23,13 @@ import java.util.Optional;
  */
 @Service
 public class MultimediaServiceImpl implements MultimediaServiceDao {
-    MultimediaRepository multimediaRepository;
+
+    private final MultimediaRepository multimediaRepository;
+
+    @Autowired
+    public MultimediaServiceImpl(MultimediaRepository multimediaRepository) {
+        this.multimediaRepository = multimediaRepository;
+    }
     @Override
     public ResponseEntity<?> deleteImage(Integer idMultimedia) {
             Optional<Multimedia> optionalMultimedia = multimediaRepository.findById(idMultimedia);
@@ -30,6 +39,18 @@ public class MultimediaServiceImpl implements MultimediaServiceDao {
         multimediaRepository.deleteById(idMultimedia);
             return ResponseEntity.ok().build();
         }
+
+        @Override
+    public ResponseEntity<?> deleteByidSalon(Integer id_salon) {
+
+        Multimedia multimedia = multimediaRepository.findById(id_salon).orElse(null);
+        if (multimedia == null) {
+            return new ResponseEntity<>("No existe la multimedia con el ID proporcionado", HttpStatus.NOT_FOUND);
+        }
+
+        multimediaRepository.deleteByidSalon(id_salon);
+        return new ResponseEntity<>("Multimedia eliminado correctamente", HttpStatus.OK);
+    }
 
 
 //public class RolServiceImpl extends GenericServiceImpl<Rol, Integer> implements GenericService<Rol, Integer> {

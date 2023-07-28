@@ -5,10 +5,13 @@
  */
 package com.tapgroup.pwsalonreservas.controller;
 
+import com.tapgroup.pwsalonreservas.model.Multimedia;
+import com.tapgroup.pwsalonreservas.model.Salon;
 import com.tapgroup.pwsalonreservas.service.MultimediaServiceImpl;
 import com.tapgroup.pwsalonreservas.service.RolServiceImpl;
 import com.tapgroup.pwsalonreservas.service.dao.MultimediaServiceDao;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,14 +25,19 @@ import org.springframework.web.bind.annotation.*;
 public class MultimediaController {
 
     @Autowired
-    MultimediaServiceImpl multimediaService;
     MultimediaServiceDao multimediaServiceDao;
 
+    //@DeleteMapping("/eliminar/{id}")
+    //public ResponseEntity<?> eliminarUsuario(@PathVariable Integer id) {
+        //return multimediaServiceDao.deleteImage(id);
+    //}
+
     @DeleteMapping("/eliminar/{id}")
-    public ResponseEntity<?> eliminarUsuario(@PathVariable Integer id) {
-        return multimediaServiceDao.deleteImage(id);
+    public ResponseEntity<Multimedia> eliminarMultimedia(@PathVariable Integer id) {multimediaServiceDao.deleteByidSalon(id);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
-//    @Operation(summary = "Se obtiene la lista de Roles")
+
+    //    @Operation(summary = "Se obtiene la lista de Roles")
 //    @GetMapping("/listar")
 //    public ResponseEntity<List<Rol>> listaRoles() {
 //        return new ResponseEntity<>(rolService.findByAll(), HttpStatus.OK);

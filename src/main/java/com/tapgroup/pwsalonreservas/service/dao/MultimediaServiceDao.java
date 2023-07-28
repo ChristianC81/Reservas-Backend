@@ -8,4 +8,6 @@ public interface MultimediaServiceDao {
 
     ResponseEntity<?> deleteImage(Integer idMultimedia);
 
+    ResponseEntity<?> deleteByidSalon(Integer id_salon);
+
 }
