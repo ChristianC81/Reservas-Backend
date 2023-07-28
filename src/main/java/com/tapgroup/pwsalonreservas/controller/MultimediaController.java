@@ -37,6 +37,11 @@ public class MultimediaController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @GetMapping("/listarMultimedias")
+    public ResponseEntity<?> listarPublicaciones() {
+        return multimediaServiceDao.listMultimedias();
+    }
+
     //    @Operation(summary = "Se obtiene la lista de Roles")
 //    @GetMapping("/listar")
 //    public ResponseEntity<List<Rol>> listaRoles() {

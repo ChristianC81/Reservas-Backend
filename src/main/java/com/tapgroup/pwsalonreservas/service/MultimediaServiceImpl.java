@@ -15,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -41,17 +42,24 @@ public class MultimediaServiceImpl implements MultimediaServiceDao {
         }
 
         @Override
-    public ResponseEntity<?> deleteBySalonId(Integer id_salon) {
+    public ResponseEntity<?> deleteBySalonId(Integer idSalon) {
 
-        Multimedia multimedia = multimediaRepository.findById(id_salon).orElse(null);
-        if (multimedia == null) {
-            return new ResponseEntity<>("No existe la multimedia con el ID proporcionado", HttpStatus.NOT_FOUND);
-        }
+        //Multimedia multimedia = multimediaRepository.findById(idSalon).orElse(null);
+        //if (multimedia == null) {
+          //  return new ResponseEntity<>("No existe la multimedia con el ID proporcionado", HttpStatus.NOT_FOUND);
+        //}
 
-        multimediaRepository.deleteBySalonId(id_salon);
+        multimediaRepository.deleteBySalonId(idSalon);
         return new ResponseEntity<>("Multimedia eliminado correctamente", HttpStatus.OK);
     }
 
+    @Override
+    public ResponseEntity<?> listMultimedias() {
+
+        List<Multimedia> multimedias = multimediaRepository.findAll();
+
+        return (ResponseEntity<?>) multimedias;
+    }
 
 //public class RolServiceImpl extends GenericServiceImpl<Rol, Integer> implements GenericService<Rol, Integer> {
 //

@@ -7,22 +7,24 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 @Repository
 public interface MultimediaRepository extends JpaRepository<Multimedia, Integer> {
 
-    Multimedia findByIdMultimedia(int i);
+    //Multimedia findByIdMultimedia(int i);
 
+
+    List<Multimedia> findByIdMultimedia(Integer idMultimedia);
     //@Modifying
     //@Query(value = "DELETE FROM Multimedia  WHERE id_salon = :id_salon", nativeQuery = true)
     //Multimedia deleteByidSalon(Integer id_salon);
-
     @Transactional
     @Modifying
-    @Query("DELETE FROM Multimedia m WHERE m.salon.id = :idSalon")
-    void deleteBySalonId(Integer idSalon);
-
-
+    @Query(value = "DELETE FROM Multimedia WHERE id_salon = :id_salon", nativeQuery = true)
+    void deleteBySalonId(@Param("id_salon") Integer idSalon);
 
 }
